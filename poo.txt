@@ -1,0 +1,1084 @@
+[Objetos y Clases]
+
+Hasta ahora hemos estado usando objetos de forma totalmente 
+transparente, casi sin ser conscientes de ello. 
+Pero, en realidad, todo en Python es un objeto, desde números a 
+funciones. El lenguaje provee ciertos mecanismos para no tener 
+que usar explícitamente técnicas de orientación a objetos.
+
+[Programación orientada a objetos]
+
+Sus beneficios son los siguientes:
+
+Encapsulamiento
+
+    Permite empaquetar el código dentro de una unidad (objeto) donde se puede determinar el ámbito de actuación.
+Abstracción
+
+    Permite generalizar los tipos de objetos a través de las clases y simplificar el programa.
+Herencia
+
+    Permite reutilizar código al poder heredar atributos y comportamientos de una clase a otra.
+Polimorfismo
+
+    Permite crear múltiples objetos a partir de una misma pieza flexible de código.
+
+    ¿Qué es un objeto?
+
+Un objeto es una estructura de datos personalizada que contiene datos y código:
+
+Elementos   ¿Qué son?   ¿Cómo se llaman?    ¿Cómo se identifican?
+
+Datos       Variables       Atributos       Mediante sustantivos
+
+Código      Funciones       Métodos             Mediante verbos
+
+Un objeto representa una instancia única de alguna entidad 
+(a través de los valores de sus atributos) e interactúa con otros 
+objetos (o consigo mismo) a través de sus métodos.
+
+¿Qué es una clase?
+
+Para crear un objeto primero debemos definir la clase que lo 
+contiene. Podemos pensar en la clase como el molde con el que se 
+crean nuevos objetos de ese tipo.
+
+En el proceso de diseño de una clase hay que tener en cuenta – 
+entre otros – <el principio de responsabilidad única> , 
+intentando que los atributos y los métodos que contenga esa 
+clase estén enfocados a un objetivo único bien definido.
+
+[Creando objetos]
+
+Empecemos por crear nuestra primera clase. En este caso vamos a modelar 
+algunos de los droides de la saga StarWars:
+
+Para ello usaremos la palabra reservada class seguida del nombre de la clase:
+
+class StarWarsDroid:
+
+    pass
+
+Consejo:
+Los nombres de clases se suelen escribir en formato 
+CamelCase y en singular
+
+Existen multitud de droides en el universo StarWars. 
+Una vez que hemos definido la clase genérica podemos crear 
+instancias/objetos (droides) concretos:
+
+c3po = StarWarsDroid()
+
+r2d2 = StarWarsDroid()
+
+bb8 = StarWarsDroid()
+
+type(c3po)
+__main__.StarWarsDroid
+
+type(r2d2)
+__main__.StarWarsDroid
+
+type(bb8)
+__main__.StarWarsDroid
+
+Añadiendo métodos
+
+Un método es una función que forma parte de una clase o de un 
+objeto. 
+En su ámbito tiene acceso a otros métodos y atributos de la 
+clase o del objeto al que pertenece.
+
+La definición de un método (de instancia) es análoga a la de una 
+función ordinaria, pero incorporando un primer parámetro self que 
+hace referencia a la instancia actual del objeto.
+
+Una de las acciones más sencillas que se pueden hacer sobre un 
+droide es encenderlo o apagarlo. 
+Vamos a implementar estos dos métodos en nuestra clase:
+
+class Droid:
+
+    def switch_on(self):
+
+        print("Hi! I'm a droid. Can I help you?")
+
+
+    def switch_off(self):
+
+        print("Bye! I'm going to sleep")
+
+k2so = Droid()
+
+k2so.switch_on()
+Hi! I'm a droid. Can I help you?
+
+k2so.switch_off()
+Bye! I'm going to sleep
+
+[Añadiendo atributos]
+
+Un atributo no es más que una variable, un nombre al que 
+asignamos un valor, con la particularidad de vivir dentro 
+de una clase o de un objeto.
+
+Supongamos que, siguiendo con el ejemplo anterior, 
+queremos guardar en un atributo el estado del droide (encendido/apagado):
+
+class Droid:
+
+    def switch_on(self):
+        self.power_on = True
+        print("Hi! I'm a droid. Can I help you?")
+
+
+    def switch_off(self):
+        self.power_on = False
+        print("Bye! I'm going to sleep")
+
+
+k2so = Droid()
+
+k2so.switch_on()
+Hi! I'm a droid. Can I help you?
+
+k2so.power_on
+True
+
+k2so.switch_off()
+Bye! I'm going to sleep
+
+k2so.power_on
+False
+
+
+
+<Importante>
+
+Siempre que queramos acceder a cualquier método o atributo del 
+objeto habrá que utilizar la palabra self.
+
+[Inicialización]
+
+Existe un método especial que se ejecuta cuando creamos una 
+instancia de un objeto. Este método es __init__ y nos permite 
+asignar atributos y realizar operaciones con el objeto en el 
+momento de su creación. 
+También es ampliamente conocido como el constructor.
+
+Veamos un ejemplo de este método con nuestros droides en el que 
+únicamente guardaremos el nombre del droide como un atributo del 
+objeto:
+
+class Droid:
+
+    def __init__(self, name: str):
+        self.name = name
+
+
+
+droid = Droid('BB-8')
+
+droid.name
+'BB-8'
+
+Es importante tener en cuenta que si no usamos self estaremos 
+creando una variable local en vez de un atributo del objeto:
+
+class Droid:
+
+    def __init__(self, name: str):
+        name = name  # No lo hagas!
+
+
+
+droid = Droid('BB-8')
+
+droid.name
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'Droid' object has no attribute 'name'
+
+[Atributos]
+
+Acceso directo
+
+En el siguiente ejemplo vemos que, aunque el atributo name se 
+ha creado en el constructor de la clase, también podemos 
+modificarlo desde «fuera» con un acceso directo:
+
+class Droid:
+
+    def __init__(self, name: str):
+        self.name = name
+
+droid = Droid('C-3PO')
+
+droid.name
+'C-3PO'
+
+droid.name = 'waka-waka'  # esto sería válido!
+
+
+
+
+(Nota)
+
+Nótese el acceso a los atributos con obj.attribute en vez de lo 
+que veníamos usando en diccionarios donde hay que escribir 
+«un poco más» obj['attribute'].
+
+
+(Propiedades)
+
+Como hemos visto previamente, los atributos definidos en un objeto
+son accesibles públicamente. Esto puede parecer extraño a personas
+que vengan de otros lenguajes de programación (véase Java). En 
+Python existe un cierto «sentido de la responsabilidad» a la 
+hora de programar y manejar este tipo de situaciones: 
+Casi todo es posible a priori pero se debe controlar 
+explícitamente.
+
+Una posible solución «pitónica» para la privacidad de los 
+atributos es el uso de propiedades. La forma más común de 
+aplicar propiedades es mediante el uso de decoradores:
+
+
+
+@property para leer el valor de un atributo.
+
+@name.setter para escribir el valor de un atributo.
+
+Veamos un ejemplo en el que estamos ofuscando el nombre del 
+droide a través de propiedades:
+
+class Droid:
+
+    def __init__(self, name: str):
+        self.hidden_name = name
+
+        @property
+        def name(self) -> str:    
+            print('inside the getter')   
+            return self.hidden_name
+
+        @name.setter
+        def name(self, name: str) -> None:      
+            print('inside the setter')        
+            self.hidden_name = name
+
+droid = Droid('N1-G3L')
+
+droid.name
+inside the getter
+'N1-G3L'
+
+droid.name = 'Nigel'
+inside the setter
+
+droid.name
+inside the getter
+'Nigel'
+
+En cualquier caso, 
+seguimos pudiendo acceder directamente a .hidden_name:
+
+droid.hidden_name
+'Nigel'
+
+Incluso podemos cambiar su valor:
+
+droid.hidden_name = 'waka-waka'
+
+droid.name
+inside the getter
+'waka-waka'
+
+(Valores calculados)
+
+Una propiedad también se puede usar para devolver un valor 
+calculado (o computado).
+
+Supongamos que la altura del periscopio de los droides 
+astromecánicos se calcula siempre como un porcentaje de su altura. Veamos cómo implementarlo:
+
+
+class AstromechDroid:
+
+    def __init__(self, name: str, height: float):
+        self.name = name
+        self.height = height
+
+        @property
+        def periscope_height(self) -> float:
+            return 0.3 * self.height
+
+droid = AstromechDroid('R2-D2', 1.05)
+
+droid.periscope_height  # podemos acceder como atributo
+0.315
+
+droid.periscope_height = 10  # no podemos modificarlo
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: can't set attribute
+
+<Las propiedades @property no pueden recibir parámetros ya que no>
+<tiene sentido semánticamente>
+
+class AstromechDroid:
+
+    def __init__(self, name: str, height: float):
+        self.name = name
+        self.height = height
+
+    @property
+    def periscope_height(self, from_ground: bool = False) -> float:    
+        height_factor = 1.3 if from_ground else 0.3   
+        return height_factor * self.height
+
+
+droid = AstromechDroid('R2-D2', 1.05)
+
+droid.periscope_height
+0.315
+
+
+
+droid.periscope_height(from_ground=True)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'float' object is not callable
+
+
+En este caso tendríamos que implementar un método para resolver 
+el escenario planteado.
+
+
+
+Consejo
+
+La ventaja de usar valores calculados sobre simples atributos es 
+que el cambio de valor en un atributo no asegura que actualicemos 
+otro atributo, y además siempre podremos modificar directamente 
+el valor del atributo, con lo que podríamos obtener efectos 
+colaterales indeseados.
+
+(Cacheando propiedades)
+
+En los ejemplos anteriores hemos creado una propiedad que calcula 
+el alto del periscopio de un droide astromecánico a partir de su 
+altura. El «coste» de este cálculo es bajo, 
+pero imaginemos por un momento que fuera muy alto.
+
+Si cada vez que accedemos a dicha propiedad tenemos que realizar 
+ese cálculo, estaríamos siendo muy ineficientes 
+(en el caso de que la altura del droide no cambiara). Veamos una 
+aproximación a este escenario usando el cacheado de propiedades:
+
+
+class AstromechDroid:
+
+    def __init__(self, name: str, height: float):
+        self.name = name
+        self.height = height
+
+    @height.setter
+    def height(self, height: float) -> None:    
+        self._periscope_height = None    
+        self._height = height
+
+
+    @property
+    def periscope_height(self) -> float:
+        if self._periscope_height is None:
+            print('Calculating periscope height...')
+            self._periscope_height = 0.3 * self.height    
+        return self._periscope_height
+
+
+Probamos ahora la implementación diseñada, 
+modificando la altura del droide:
+
+droid = AstromechDroid('R2-D2', 1.05)
+
+droid.periscope_height
+Calculating periscope height...
+0.315
+
+droid.periscope_height  # Cacheado!
+0.315
+
+droid.height = 1.15
+
+droid.periscope_height
+Calculating periscope height...
+0.345
+
+droid.periscope_height  # Cacheado!
+0.345
+
+
+(Ocultando atributos)
+
+Python tiene una convención sobre aquellos atributos que queremos 
+hacer «privados» (u ocultos): 
+comenzar el nombre con doble subguión __
+
+class Droid:
+
+    def __init__(self, name: str):
+        self.__name = name
+
+droid = Droid('BC-44')
+
+droid.__name  # efectivamente no aparece como atributo
+Traceback (most recent call last):
+    File "<stdin>", line 1, in <module>
+AttributeError: 'Droid' object has no attribute '__name'
+
+
+Lo que realmente ocurre tras el telón se conoce como 
+«name mangling» y consiste en modificar el nombre del 
+atributo incorporado la clase como un prefijo. Sabiendo esto 
+podemos acceder al valor del atributo supuestamente privado:
+
+droid._Droid__name
+'BC-44'
+
+
+
+
+Nota
+
+La filosofía de Python permite hacer casi cualquier cosa con 
+los objetos que se manejan, eso sí, el sentido de la 
+responsabilidad se traslada a la persona que desarrolla e 
+incluso a la persona que hace uso del objeto.
+
+(Atributos de clase)
+
+
+Podemos asignar atributos a las clases y serán heredados por 
+todos los objetos instanciados de esa clase.
+
+A modo de ejemplo, en un principio, todos los droides están diseñados para que obedezcan a su dueño. Esto lo conseguiremos a nivel de clase, 
+salvo que ese comportamiento se sobreescriba:
+
+class Droid:
+
+    obeys_owner = True  # obedece a su dueño
+
+good_droid = Droid()
+
+good_droid.obeys_owner
+True
+
+t1000 = Droid()  # T-1000 (Terminator)
+
+t1000.obeys_owner = False
+
+t1000.obeys_owner
+False
+
+Droid.obeys_owner  # el cambio no afecta a nivel de clase
+True
+
+
+
+
+Truco
+
+Los atributos de clase son accesibles tanto desde la clase como 
+desde las instancias creadas.
+
+
+<A tener en cuenta lo siguiente>:
+
+Si modificamos un atributo de clase desde un objeto, 
+sólo modificamos el valor en el objeto y no en la clase.
+
+Si modificamos un atributo de clase desde una clase, 
+modificamos el valor en todos los objetos pasados y futuros.
+
+Veamos un ejemplo de esto último:
+
+class Droid:
+
+    obeys_owner = True
+
+droid1 = Droid()
+
+droid1.obeys_owner
+True
+
+droid2 = Droid()
+
+droid2.obeys_owner
+True
+
+Droid.obeys_owner = False  # cambia pasado y futuro
+
+droid1.obeys_owner
+False
+
+droid2.obeys_owner
+False
+
+droid3 = Droid()
+
+droid3.obeys_owner
+False
+
+
+(Métodos)
+
+<Métodos de instancia>
+
+Un método de instancia es un método que modifica o accede al 
+estado del objeto al que hace referencia. Recibe self como primer 
+parámetro, el cual se convierte en el propio objeto sobre el que 
+estamos trabajando. Python envía este argumento de forma transparente:
+no hay que pasarlo como argumento.
+
+Veamos un ejemplo en el que, además del constructor, 
+creamos un método de instancia para desplazar un droide:
+
+class Droid:
+
+    def __init__(self, name: str):  # método de instancia -> constructor
+        self.name = name
+        self.covered_distance = 0
+
+    def move_up(self, steps: int) -> None:  # método de instancia
+        self.covered_distance += steps
+        print(f'Moving {steps} steps')
+
+droid = Droid('C1-10P')
+
+droid.move_up(10)
+Moving 10 steps
+
+
+(Propiedades vs Métodos)
+
+Es razonable plantearse cuándo usar propiedades o cuándo 
+usar métodos de instancia.
+
+((Si la implementación requiere de parámetros, no hay confusión, necesitamos usar métodos.))
+
+
+(Métodos de clase)
+
+Un método de clase es un método que modifica o accede al estado de
+la clase a la que hace referencia. Recibe cls como primer 
+parámetro, el cual se convierte en la propia clase sobre la que 
+estamos trabajando. Python envía este argumento de forma 
+transparente. La identificación de estos métodos se completa 
+aplicando el decorador @classmethod a la función.
+
+
+Veamos un ejemplo en el que implementamos un método de clase que 
+indica el número de droides que hemos creado:
+
+class Droid:
+
+    count = 0
+
+
+    def __init__(self):
+        Droid.count += 1
+
+
+    @classmethod
+    def total_droids(cls) -> None:
+        print(f'{cls.count} droids built so far!')
+
+
+droid1 = Droid()
+droid2 = Droid()
+droid3 = Droid()
+
+Droid.total_droids()
+3 droids built so far!
+
+
+
+(Consejo)
+
+El nombre cls es sólo una convención. 
+Este parámetro puede llamarse de otra manera, pero seguir el 
+estándar ayuda a la legibilidad.
+
+
+(Métodos estáticos)
+
+Un método estático es un método que no «debería» modificar el 
+estado del objeto ni de la clase. No recibe ningún parámetro 
+especial. La identificación de estos métodos se completa 
+aplicando el decorador @staticmethod a la función.
+
+
+Veamos un ejemplo en el que creamos un método estático para devolver 
+las categorías de droides que existen en StarWars:
+
+lass Droid:
+
+    def __init__(self):
+        pass
+
+
+        @staticmethod
+        def get_droids_categories() -> tuple[str]:    
+            return ('Messeger', 'Astromech', 'Power', 'Protocol')
+
+
+Droid.get_droids_categories()
+('Messeger', 'Astromech', 'Power', 'Protocol')
+
+
+(METODOS DECORADOS)
+
+Es posible que, según el escenario, queramos decorar ciertos 
+métodos de nuestra clase. Esto es posible siguiendo la misma 
+estructura de decoradores que ya hemos visto, pero con ciertos 
+matices.
+
+A continuación un ejemplo en el que creamos un decorador para 
+auditar las acciones de un droide y saber quién ha hecho qué:
+
+class Droid:
+
+    @staticmethod
+    def audit(method):
+        def wrapper(self, *args, **kwargs):
+            print(f'Droid {self.name} running {method.__name__}')
+            return method(self, *args, **kwargs)
+        return wrapper
+
+        def __init__(self, name: str):
+            self.name = name
+            self.pos = [0, 0]
+
+            @audit
+            def move(self, x: int, y: int):        
+                self.pos[0] += x        
+                self.pos[1] += y
+
+                @audit
+                def reset(self):
+                    self.pos = [0, 0]
+
+
+droid = Droid('B1')
+
+droid.move(1, 1)
+Droid B1 running move
+
+droid.reset()
+Droid B1 running reset
+
+El decorador se puede poner dentro o fuera de la clase. 
+Por una cuestión de encapsulamiento podría tener sentido 
+dejarlo dentro de la clase como método estático.
+
+
+
+Truco
+
+También es posible aplicar esta misma técnica usando decoradores 
+con parámetros.
+
+                  
+                
+            
+
+(DECORADORES FUNCIONES)
+
+Hay situaciones en las que necesitamos modificar el comportamiento 
+de funciones existentes pero sin alterar su código. 
+Para estos casos es muy útil usar decoradores.
+
+Un decorador es una función que recibe como parámetro una función 
+y devuelve otra función. 
+Se podría ver como un caso particular de clausura.
+
+El esqueleto básico de un decorador es el siguiente:
+
+def my_decorator(func):
+    def wrapper(*args, **kwargs):
+        # some code before calling func
+        return func(*args, **kwargs)
+        # some code after calling func
+    return wrapper
+
+(Elemento)           (Descripción)
+    
+ my_decorator        Nombre del decorador
+    
+ wrapper             Función interior (convención de nombre)
+    
+  func               Función a decorar (convención de nombre)
+    
+  *args              Argumentos posicionales (convención de nombre)
+    
+  **kwargs            Argumentos nominales (convención de nombre)
+
+
+  Veamos un ejemplo de decorador que convierte el resultado 
+  numérico de una función a su representación binaria:
+
+  def res2bin(func):
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+        return bin(result)
+    return wrapper
+
+Ahora definimos una función ordinaria 
+(que usaremos más adelante) y que computa 𝑥𝑛:
+
+  def power(x: int, n: int) -> int:
+    return x ** n 
+
+    power(2, 3)
+    8
+    
+    power(4, 5)
+    1024
+    
+    Ahora aplicaremos el decorador definido previamente res2bin() 
+    sobre la función ordinaria power(). Se dice que res2bin() es 
+    la función decoradora y que power() es la función decorada:
+
+    decorated_power = res2bin(power)
+
+    decorated_power(2, 3)  # 8
+    '0b1000'
+
+    decorated_power(4, 5)  # 1024
+    '0b10000000000
+
+(Usando @ para decorar)
+Python nos ofrece un «syntactic sugar» para simplificar la 
+aplicación de los decoradores a través del operador @ justo 
+antes de la definición de la función que queremos decora
+
+@res2bin
+def power(x: int, n: int) -> int:
+    return x ** n
+
+    power(2, 3)
+    '0b1000'
+    
+    power(4, 5)
+    '0b10000000000'
+
+
+
+(Clausuras)
+
+Una clausura (del término inglés «closure») establece el uso de una función 
+interior que se genera dinámicamente y recuerda los valores de los argumentos 
+con los que fue creada:
+
+def make_multiplier_of(n):
+    def multiplier(x):
+        return x * n
+    return multiplier
+
+
+(Métodos mágicos)
+
+Cuando escribimos 'hello world' * 3 ¿cómo sabe el objeto 
+'hello world' lo que debe hacer para multiplicarse con el 
+objeto entero 3? O dicho de otra forma, ¿cuál es la 
+implementación del operador * para «strings» e «int»? 
+En valores numéricos puede parecer evidente 
+(siguiendo los operadores matemáticos), 
+pero no es así para otros objetos. 
+La solución que proporciona Python para estas (y otras) 
+situaciones son los métodos mágicos.
+
+Los métodos mágicos empiezan y terminan por doble subguión 
+__ (es por ello que también se les conoce como «dunder-methods»). 
+Uno de los «dunder-methods» más famosos es el constructor de una 
+clase: __init__().
+
+
+
+Importante
+
+Digamos que los métodos mágicos se «disparan» de manera 
+transparente cuando utilizamos ciertas estructuras y 
+expresiones del lenguaje.
+
+Para el caso de los operadores, existe un método mágico asociado 
+(que podemos personalizar). Por ejemplo la comparación de dos 
+objetos se realiza con el método __eq__():
+
+Extrapolando esta idea a nuestro universo StarWars, 
+podríamos establecer que dos droides son iguales 
+si su nombre es igual,
+independientemente de que tengan distintos números de serie:
+
+class Droid:
+
+    def __init__(self, name: str, serial_number: int):
+        self.name = name
+        self.serial_number = serial_number
+
+
+    def __eq__(self, droid: Droid) -> bool:
+        return self.name == droid.name
+
+
+
+droid1 = Droid('C-3PO', 43974973242)
+droid2 = Droid('C-3PO', 85094905984)
+
+droid1 == droid2  # llamada implícita a __eq__
+True
+
+droid1.__eq__(droid2)
+True
+
+
+
+(Truco)
+Para poder utilizar la anotación de tipo Droid necesitamos añadir 
+la siguiente línea al principio de nuestro código:
+from __future__ import annotations
+
+
+
+Nota
+
+Los métodos mágicos no sólo están restringidos a operadores de 
+comparación o matemáticos. Existen muchos otros en la 
+documentación oficial de Python, donde son llamados métodos 
+especiales.
+
+
+Veamos un ejemplo en el que «sumamos» dos droides 
+(esto se podría ver como una fusión). Supongamos que la suma de 
+dos droides implica: a) que el nombre del droide resultante es la
+ concatenación de los nombres de los droides de entrada; 
+ b) que la energía del droide resultante es la suma de la energía 
+ de los droides de entrada:
+
+ class Droid:
+
+ def __init__(self, name: str, power: int):
+     self.name = name
+     self.power = power
+
+
+ def __add__(self, other: Droid) -> Droid:
+     new_name = self.name + '-' + other.name
+     new_power = self.power + other.power
+     return Droid(new_name, new_power)  #Hay que devolver un objeto de tipo Droid
+
+droid1 = Droid('C3PO', 45)
+droid2 = Droid('R2D2', 91)
+
+droid3 = droid1 + droid2
+
+print(f'Fusion droid:\n{droid3.name} with power {droid3.power}')
+Fusion droid:
+C3PO-R2D2 with power 136
+
+
+
+Importante
+
+Este tipo de operaciones debe devolver un objeto de la clase con 
+la que estamos trabajando.
+
+
+
+Truco
+
+En este tipo de métodos mágicos el parámetro suele llamarse 
+other haciendo referencia al «otro» objeto que entra en la 
+operación. Es una convención.
+
+(Sobrecarga de operadores)
+
+¿Qué ocurriría si sumamos un número entero a un droide? 
+De primeras nada, porque no lo tenemos contemplado, 
+pero podríamos establecer un significado: 
+Si sumamos un número entero a un droide éste aumenta su energía 
+en el valor indicado. Vamos a intentar añadir también este 
+comportamiento al operador suma ya implementado.
+
+Aunque en Python no existe técnicamente la 
+«sobrecarga de funciones», sí que podemos simularla 
+identificando el tipo del objeto que nos pasan y realizando 
+acciones en base a ello:
+
+class Droid:
+
+    def __init__(self, name: str, power: int):
+        self.name = name
+        self.power = power
+
+        def __add__(self, other: Droid | int) -> Droid:
+            if isinstance(other, Droid):
+                new_name = self.name + '-' + other.name
+                new_power = self.power + other.power
+            elif isinstance(other, int):
+                new_name = self.name
+                new_power = self.power + other   
+            return Droid(new_name, new_power)
+
+
+
+droid = Droid('L3-37', 75)
+
+powerful_droid = droid + 25
+
+powerful_droid.power
+100
+
+
+Esta misma estrategia se puede aplicar al operador de igualdad 
+ya que es muy habitual encontrar comparaciones de objetos en 
+nuestro código. Por ello, deberíamos tener en cuenta si se van 
+a comparar dos objetos de distinta naturaleza.
+
+Retomando el caso ya visto… 
+¿qué pasaría si comparamos un droide con una cadena de texto?
+
+class Droid:
+    def __init__(self, name: str, serial_number: int):
+        self.name = name
+        self.serial_number = serial_number
+
+
+    def __eq__(self, droid: Droid) -> bool:
+        return self.name == droid.name
+
+droid = Droid('C-3PO', 43974973242)
+
+droid == 'C-3PO'
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<stdin>", line 6, in __eq__
+AttributeError: 'str' object has no attribute 'name'
+
+
+class Droid:
+
+    def __init__(self, name: str, serial_number: int):
+        self.name = name
+        self.serial_number = serial_number
+
+
+    def __eq__(self, other: Droid | object) -> bool:
+        if isinstance(other, Droid):
+            return self.name == droid.name
+        return False
+
+Ahora podemos comprobar que todo funciona como esperaríamos:
+
+droid = Droid('C-3PO', 43974973242)
+
+droid == 'C-3PO'
+False
+
+(__str__)
+
+Uno de los métodos mágicos más utilizados es __str__ y permite 
+establecer la forma en la que un objeto es representado como 
+cadena de texto:
+
+class Droid:
+
+    def __init__(self, name: str, serial_number: int):
+        self.serial_number = serial_number
+        self.name = name
+
+
+    def __str__(self) -> str:
+        return f'🤖 Droid "{self.name}" serial-no {self.serial_number}'
+
+droid = Droid('K-2SO', 8403898409432)
+
+print(droid)  # llamada a droid.__str__()
+🤖 Droid "K-2SO" serial-no 8403898409432
+
+
+str(droid)
+'🤖 Droid "K-2SO" serial-no 8403898409432'
+
+f'Droid -> {droid}'
+'Droid -> 🤖 Droid "K-2SO" serial-no 8403898409432'
+
+(__repr__)
+
+En ausencia del método __str__() se usará por defecto el método 
+__repr__(). La diferencia entre ambos métodos es que el primero 
+está más pensado para una representación del objeto de cara al 
+usuario mientras que el segundo está más orientado al desarrollador.
+
+El método __repr()__ se invoca automáticamente en los dos 
+siguientes escenarios:
+
+Cuando no existe el método __str__() en el objeto y tratamos 
+de encontrar su representación en cadena de texto con str() o 
+print().
+
+Cuando utilizamos el intérprete interactivo de Python y pedimos el «valor» del objeto.
+
+Veamos un ejemplo. En primer lugar un droide que sólo implementa el método __str__():
+
+class Droid:
+    def __init__(self, name: str):
+        self.name = name
+
+
+    def __str__(self):
+        return f"Hi there! I'm {self.name}"
+
+
+14 = Droid('C-14')
+
+print(c14)  # __str()__
+Hi there! I'm C-14
+
+c14  # __repr()__
+<__main__.Droid at 0x103d7cc10>
+
+Ahora implementamos también el método __repr__():
+
+class Droid:
+
+    def __init__(self, name: str):
+        self.name = name
+
+
+    def __str__(self):
+        return f"Hi there! I'm {self.name}"
+
+
+    def __repr__(self):
+        return f"[Droid] '{self.name}' @ {hex(id(self))}"
+
+c14 = Droid('C-14')
+
+print(c14)
+Hi there! I'm C-14
+
+c14  # __repr__()
+[Droid] 'C-14' @ 0x103e4e350
+
+
+
+Atención
+
+El hecho de incorporar la dirección de memoria del objeto en 
+el método __repr__() no es en absoluto obligatorio, ni 
+siquiera necesario. Todo depende de los requerimientos que 
+tengamos en el proyecto.
+
+(Gestores de contexto)
